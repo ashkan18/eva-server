@@ -17,9 +17,27 @@ def login_required():
                 token = request.form['token']
             except:
                 app.logger.debug("token is missing in the request, invalid call")
-                return jsonify(error="missing token or session expired")
+                return jsonify(success=False, error="missing token or session expired")
             ret = f(*args, **kwargs)
             return ret
     
         return decorated_function
+    return decorator
+
+
+def validate_request(*params):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            for param in params:
+                try:
+                    data = request.form[param]
+                except:
+                    return jsonify(success=False, error="missing parameter", parameter=param)
+            app.logger.debug(str(params))
+            ret = f(*args, **kwargs)
+            return ret
+
+        return decorated_function
+
     return decorator

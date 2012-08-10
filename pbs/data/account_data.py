@@ -6,7 +6,7 @@ Created on Jul 26, 2012
 from base_data import BaseData
 from pbs import app
 
-class AccountDb(BaseData):
+class AccountData(BaseData):
     
     '''
         This method authenticates the user
@@ -44,10 +44,11 @@ class AccountDb(BaseData):
     '''
     def registerUser(self, username, password, firstname, lastname):
         try:
-            self.engine.execute(""" INSERT INTO users(firstname, lastname, email, password)
+            data = self.engine.execute(""" INSERT INTO users(firstname, lastname, email, password)
                                     VALUES (%s, %s, %s, md5(%s))""", firstname, lastname, username, password)
             
-            return True
+            
+            return data.lastrowid
         except:
             return False
 

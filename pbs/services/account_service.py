@@ -4,12 +4,12 @@ Created on Jul 26, 2012
 @author: anasseri
 '''
 
-from pbs.data.account_data import AccountDb
+from pbs.data.account_data import AccountData
 
 class AccountService:
     account_db = None;
     def __init__(self):
-        self.account_db = AccountDb()
+        self.account_db = AccountData()
         
         
     def login (self, username, password):

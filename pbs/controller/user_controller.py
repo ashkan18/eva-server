@@ -7,7 +7,7 @@ from flask import request
 from flask import jsonify
 from pbs import app
 from pbs.services.account_service import AccountService
-from pbs.helpers.auth_helper import login_required
+from pbs.helpers.auth_helper import login_required, validate_request
 
 @app.route("/user/login", methods=['POST'])
 def login():
@@ -27,11 +27,18 @@ def login():
 
 
 @app.route("/user/reg", methods=['POST'])
+@validate_request('email', 'pw', 'firstname', 'lastname')
 def register():
     app.logger.debug("register")
     acc_svc = AccountService()
-    register_response = acc_svc.registerUser(request.form['uname'], request.form['psw'], request.form['firstname'], request.form['lastname'])
-    return jsonify(response=register_response)
+    register_response = acc_svc.registerUser(request.form['email'], 
+                                             request.form['pw'], request.form['firstname'], 
+                                             request.form['lastname'])
+    if register_response == False:
+        return jsonify(success=False)
+    else:
+        return jsonify(success=True, response=register_response,
+                       firstname=request.form['firstname'], lastname=request.form['lastname']) 
 
 
 @app.route("/user/<int:userid>", methods=['GET'])
