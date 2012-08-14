@@ -59,5 +59,19 @@ def addSell():
 def getUsersSells(userid):
     if userid is not None:
         parking_service = ParkingService()
-        return parking_service.getUsersParkingSells(userid)
+        return jsonify(success=True, response=parking_service.getUsersParkingSells(userid))
+    else:
+        return jsonify(success=False, error="Missing userid in request")
+    
+
+@app.route("/parking/rents/<int:userid>", methods=['GET'])
+@login_required()
+def getUsersRents(userid):
+    if userid is not None:
+        parking_service = ParkingService()
+        return jsonify(success=True, response=parking_service.getUsersParkingRents(userid))
+    else:
+        return jsonify(success=False, error="Missing userid in request")
+    
+
     
