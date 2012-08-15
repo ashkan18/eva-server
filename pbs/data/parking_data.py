@@ -38,14 +38,13 @@ class ParkingData(BaseData):
         except:
             return False
 
-    def addParkingSellPeriodDay(self, parking_id, start_date, end_date, price_per_hour):
+    def addParkingSellPeriodDay(self, sell_period_id, day, available_from, available_to):
         try:
-            user_data = self.engine.execute("""INSERT INTO sell_period
-                                                (parking_id ,start_date ,
-                                                end_date , price_per_hour)
-                                               VALUES(%s, %s, %s, %s) 
-                                                """, parking_id ,start_date ,
-                                                end_date ,price_per_hour)
+            user_data = self.engine.execute("""INSERT INTO sell_period_day
+                                                (sell_period_id ,available_from ,
+                                                available_to)
+                                               VALUES(%s, %s, %s) 
+                                                """, sell_period_id, available_from, available_to)
             return user_data.lastrowid
         except:
             return False

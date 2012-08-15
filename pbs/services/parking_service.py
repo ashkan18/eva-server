@@ -8,22 +8,27 @@ from pbs.data.parking_data import ParkingData
 
 class ParkingService():
     
-    def addParkingToUser(self,userId ,parkingName ,
-                       addressLine1 ,addressLine2 ,
-                       city ,state ,country, start_date, end_date):
-        parking_data = ParkingData()
-        insert_response = parking_data.addSellForUser(userId ,parkingName ,
-                       addressLine1 ,addressLine2 ,
-                       city ,state ,country, start_date, end_date)
+    def __init__(self, parking_data = ParkingData()):
+        self.__parking_data = parking_data
         
+    
+    def addParkingToUser(self,userId ,parkingName ,addressLine1 ,addressLine2 ,city ,state ,country):
+        insert_response = self.__parking_data.addParkinForUser(userId ,parkingName 
+                                                               ,addressLine1 ,addressLine2 
+                                                               ,city ,state ,country)
         return insert_response;
     
-    def assignFreeTimeToParking(self, parking_id, day_of_week, price_per_hour):
-        parking_data = ParkingData()
-        assign_response = parking_data.assign_free_time_to_parking()
+    def addParkingSellPeriod(self, parking_id, start_date, end_date, price_per_hour):
+        assign_response = self.__parking_data.addParkingSellPeriod(parking_id, start_date, 
+                                                                   end_date, price_per_hour)
         return assign_response
-        
     
+    def addParkingSellPeriodDay(self, sell_period_id, day, available_from, available_to): 
+        add_parking_day_response = self.__parking_data.addParkingSellPeriodDay(sell_period_id, 
+                                                                               day, available_from, 
+                                                                               available_to)
+        return add_parking_day_response
+        
     def getUsersParkingSells(self, userid):
         parking_data = ParkingData()
         return parking_data.getUsersSells(userid)

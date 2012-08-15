@@ -12,7 +12,7 @@ from pbs.services.parking_service import ParkingService
 from pbs.helpers.auth_helper import login_required
 
 @app.route("/sell/", methods=['POST'])
-def addSell():
+def addParking():
     app.logger.debug("adding new sell for user")
     
     userId = None
@@ -22,11 +22,7 @@ def addSell():
     city = None
     state = None
     country = None
-    availableStart = None
-    availableEnd   = None
-    startDate = None
-    endDate = None
-
+    
     try:
         userId = request.form['uid']
         parkingName = request.form['pname']
@@ -35,20 +31,65 @@ def addSell():
         city = request.form['city']
         state = request.form['state']
         country = request.form['cntry']
-        availableStart = request.form['astart']
-        availableEnd   = request.form['aend']
-        startDate = request.form['sdate']
-        endDate = request.form['edate']
     except:
         return jsonify(success=False, error="missing parameter")
     
     parkingSvc = ParkingService()
     
-    insert_response = parkingSvc.addParkingSellToUser(userId ,parkingName ,
-                                            addressLine1 ,addressLine2 ,city ,
-                                            state ,country ,availableStart ,
-                                            availableEnd ,startDate ,endDate)
+    insert_response = parkingSvc.addParkingToUser(userId, parkingName, addressLine1, addressLine2, city, state, country)
     
+    if insert_response is not None:
+        return jsonify(success=True)
+    else:
+        return jsonify(success=False, error='there was problem in adding this sell')
+
+
+@app.route("/parking/period", methods=['POST'])
+def addParkingSellPeriod():
+    app.logger.debug("adding new sell for user")
+    
+    parking_id = None
+    start_date = None
+    end_date   = None
+    price_per_hour = None
+    
+    try:
+        parking_id = request.form['pid']
+        start_date = request.form['start']
+        end_date   = request.form['end']
+        price_per_hour = request.form['pph']
+    except:
+        return jsonify(success=False, error="missing parameter")
+    
+    parkingSvc = ParkingService()
+    
+    insert_response = parkingSvc.addParkingSellPeriod(parking_id, start_date, end_date, price_per_hour)
+    
+    if insert_response is not None:
+        return jsonify(success=True)
+    else:
+        return jsonify(success=False, error='there was problem in adding this sell')
+
+@app.route("/parking/period/day", methods=['POST'])
+def addParkingSellPeriodDay():
+    app.logger.debug("adding new sell for user")
+    
+    sell_period_id = None
+    day            = None
+    available_from = None
+    available_to   = None
+    
+    try:
+        sell_period_id = request.form['spid']
+        day = request.form['day']
+        available_from   = request.form['from']
+        available_to = request.form['to']
+    except:
+        return jsonify(success=False, error="missing parameter")
+    
+    parkingSvc = ParkingService()
+    
+    insert_response = parkingSvc.addParkingSellPeriodDay(sell_period_id, day, available_from, available_to) 
     if insert_response is not None:
         return jsonify(success=True)
     else:
