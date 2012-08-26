@@ -9,6 +9,8 @@ from pbs import app
 from pbs.services.account_service import AccountService
 from pbs.helpers.auth_helper import login_required, validate_request
 
+
+''' curl -x POST http://localhost:5000/user/login -F un=a@b.com -F pw=test '''
 @app.route("/user/login", methods=['POST'])
 def login():
     app.logger.debug("login requested")

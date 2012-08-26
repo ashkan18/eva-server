@@ -11,7 +11,8 @@ from pbs import app
 from pbs.services.parking_service import ParkingService
 from pbs.helpers.auth_helper import login_required
 
-@app.route("/sell/", methods=['POST'])
+''' curl -X http://192.168.0.109:5000/parking/add -F uid=1 -F pname='test1' -F add1='318 summer' -F add2='unit1' -F city='somerville' -F state='MA' -F country='US' '''
+@app.route("/parking/add", methods=['POST'])
 def addParking():
     app.logger.debug("adding new sell for user")
     
@@ -22,7 +23,6 @@ def addParking():
     city = None
     state = None
     country = None
-    
     try:
         userId = request.form['uid']
         parkingName = request.form['pname']
@@ -30,7 +30,7 @@ def addParking():
         addressLine2 = request.form['add2']
         city = request.form['city']
         state = request.form['state']
-        country = request.form['cntry']
+        country = request.form['country']
     except:
         return jsonify(success=False, error="missing parameter")
     
@@ -43,8 +43,8 @@ def addParking():
     else:
         return jsonify(success=False, error='there was problem in adding this sell')
 
-
-@app.route("/parking/period", methods=['POST'])
+''' curl -X POST http://192.168.0.109:5000/parking/setperiod -F pid=1 -F start='04/07/83' -F end='04/07/85' -F pph=30 '''
+@app.route("/parking/setperiod", methods=['POST'])
 def addParkingSellPeriod():
     app.logger.debug("adding new sell for user")
     
